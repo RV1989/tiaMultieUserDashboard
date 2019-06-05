@@ -1,0 +1,24 @@
+{
+  "name": "tiaMultieUserDashboard",
+  "version": "1.0.0",
+  "description": "dashboard for tia portal multie user",
+  "main": "getMultieUserData.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RV1989/tiaMultieUserDashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RV1989/tiaMultieUserDashboard/issues"
+  },
+  "homepage": "https://github.com/RV1989/tiaMultieUserDashboard#readme",
+  "dependencies": {
+    "sqlite": "^3.0.3",
+    "sqlite3": "^4.0.8"
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "./testData/db/projects.db",
+            "dialect": "SQLite",
+            "name": "projectsDB"
+        }
+    ]
+}
