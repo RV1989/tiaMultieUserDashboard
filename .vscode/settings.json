@@ -4,6 +4,11 @@
             "database": "./testData/db/projects.db",
             "dialect": "SQLite",
             "name": "projectsDB"
+        },
+        {
+            "database": "./database.db",
+            "dialect": "SQLite",
+            "name": "main app"
         }
     ]
 }
