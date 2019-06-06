@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/RV1989/tiaMultieUserDashboard#readme",
   "dependencies": {
+    "randomcolor": "^0.5.4",
     "sqlite": "^3.0.3",
     "sqlite3": "^4.0.8"
   }

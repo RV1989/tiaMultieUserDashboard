@@ -6,9 +6,14 @@
             "name": "projectsDB"
         },
         {
-            "database": "./database.db",
+            "database": "./app.db",
             "dialect": "SQLite",
             "name": "main app"
+        },
+        {
+            "database": "./testData/proj/Decospan BackZone PLC2 online_V15.1/db/workspace.db",
+            "dialect": "SQLite",
+            "name": "workSPace"
         }
     ]
 }
