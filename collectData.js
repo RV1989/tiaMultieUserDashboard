@@ -2,6 +2,7 @@ const sqlite = require('sqlite')
 const path = require('path')
 const randomColor = require('randomcolor')
 
+
 // initialize database for first run
 const initDb = async function(appDb){
     let initProjectsQuery =`CREATE TABLE IF NOT EXISTS projects (
@@ -15,7 +16,15 @@ const initDb = async function(appDb){
         id INTEGER PRIMARY KEY AUTOINCREMENT ,
         computerName TEXT ,
         color TEXT  )`
-     return  await appDb.run(initUserQuery)
+       await appDb.run(initUserQuery)
+     let initRevisionQuery =`CREATE TABLE IF NOT EXISTS revisions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT ,
+        revision INT ,
+        revisionComment TEXT,
+        dateTime TEXT,
+        userId INT,
+        projectId  )`
+     return  await appDb.run(initRevisionQuery)
      
 }
 
@@ -44,15 +53,16 @@ return await Promise.all(getProjectsPromis );
 }
 
 const appProjectsData = async function (multieUserPath,appDb){
-    let query = `SELECT name FROM projects `;
+    let query = `SELECT * FROM projects `;
     var projects = await appDb.all(query);
     for ( let project of projects){
-        await projectUsers(multieUserPath , project.name , appDb)
+        await projectUsers(multieUserPath , project , appDb)
+        await projectRevisions(multieUserPath , project, project.lastKnownRev , appDb)
     }
     return Promise.resolve()
 }
-const projectUsers  = async function (multieUserPath,projectName , appDb){
-    let dbUsers =  await sqlite.open(path.join(multieUserPath,'proj',projectName,'db','workspace.db'))
+const projectUsers  = async function (multieUserPath,project , appDb){
+    let dbUsers =  await sqlite.open(path.join(multieUserPath,'proj',project.name,'db','workspace.db'))
     let query = `SELECT DISTINCT MachineName FROM Workspace WHERE MachineName IS NOT NULL AND MachineName != "" `;
     let users= await dbUsers.all(query);
     for ( let user of users){
@@ -65,8 +75,6 @@ const projectUsers  = async function (multieUserPath,projectName , appDb){
              await appDb.run(insertQuery)
             
         }
-        
-
     }
     return Promise.resolve();
    
@@ -75,20 +83,67 @@ const projectUsers  = async function (multieUserPath,projectName , appDb){
  
 }
 
-const projectRevisions = async function (multieUserPath,projectName , appDb){
+const projectRevisions = async function (multieUserPath,project, lastRevision , appDb){
+    let dbHistory =  await sqlite.open(path.join(multieUserPath,'proj',project.name,'db','history.db'))
+    let query = `SELECT * FROM History WHERE Revision > ${lastRevision} `;
+    let newHistoryEntrees= await dbHistory.all(query);
+    for (let newHistoryEntree of newHistoryEntrees){
+        let userId = await getUserIdFromProject(multieUserPath, project.name , newHistoryEntree.WorkspaceId , appDb)
+        if (!userId){
+            userId = {id:0}
+        }
+        let revision = newHistoryEntree.Revision
+        let revisionCustomData = JSON.parse(newHistoryEntree.CustomData)
+        let revisionComment = revisionCustomData.text.replace('"','')
+        let revisionDateTime = revisionCustomData.dateTime
+        let insertQuery = `INSERT INTO revisions (revision ,revisionComment , dateTime, userId , projectId) 
+        VALUES (${revision} , "${revisionComment}" , '${revisionDateTime}' , ${userId.id} , ${project.id} )`
+        // {"userName":"Ceratec","dateTime":"2019-02-07T09:32:44.4254918Z","text":"Initial upload","projectVersion":"15.1.0.0","enableCommissionining":null,"enableDivergentData":null}
+        await appDb.run(insertQuery)
+        let updateQuery = `        
+        UPDATE projects
+        SET lastKnownRev = ${revision}
+        WHERE
+         id = ${project.id};`
+         await appDb.run(updateQuery)
+
+        
+    }
+
+    return Promise.resolve()
+    
+
 
 }
 
-const main = async function() {
+const getUserIdFromProject = async function (multieUserPath ,projectName, workspaceId, appDb){
+    let dbUsers =  await sqlite.open(path.join(multieUserPath,'proj',projectName,'db','workspace.db'))
+    let query = `SELECT MachineName FROM Workspace WHERE WorkSpaceId == '${workspaceId}' `;
+    let user= await dbUsers.get(query);
+    let queryApp = `SELECT id FROM users WHERE computerName = "${user.MachineName}"`
+    let id = await appDb.get(queryApp)
+    return(id)
+}
 
+
+
+const main = async function() {
 const appDb = await sqlite.open('./app.db')
 const multieUserDefaultPath = './testData'
 
 await initDb(appDb)
 await getProjects(multieUserDefaultPath, appDb)
 await appProjectsData(multieUserDefaultPath, appDb)
-let query = `SELECT * FROM users `;
-var projects = await appDb.all(query);
+//select dateofbirth from customer Where DateofBirth  BETWEEN date('1004-01-01') AND date('1980-12-31');
+
+let countQuery = `
+SELECT strftime('%Y-%m-%d', dateTime) as date ,COUNT(*) as revs FROM revisions
+WHERE projectId == 2
+GROUP BY strftime('%Y-%m-%d', dateTime);
+
+`
+let query = `SELECT * FROM revisions WHERE dateTime  BETWEEN date('2019-03-04')AND date('2019-03-10')`;
+var projects = await appDb.all(countQuery);
 console.log(projects)
 
 }

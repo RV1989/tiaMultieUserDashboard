@@ -14,6 +14,11 @@
             "database": "./testData/proj/Decospan BackZone PLC2 online_V15.1/db/workspace.db",
             "dialect": "SQLite",
             "name": "workSPace"
+        },
+        {
+            "database": "./testData/proj/Decospan BackZone PLC2 online_V15.1/db/history.db",
+            "dialect": "SQLite",
+            "name": "history"
         }
     ]
 }
