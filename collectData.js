@@ -1,6 +1,9 @@
 const sqlite = require('sqlite')
 const path = require('path')
 const randomColor = require('randomcolor')
+const Moment = require("moment");
+const MomentRange = require("moment-range");
+const moment = MomentRange.extendMoment(Moment);
 
 
 // initialize database for first run
@@ -127,6 +130,8 @@ const getUserIdFromProject = async function (multieUserPath ,projectName, worksp
 
 
 
+
+
 const main = async function() {
 const appDb = await sqlite.open('./app.db')
 const multieUserDefaultPath = './testData'
@@ -145,6 +150,8 @@ GROUP BY strftime('%Y-%m-%d', dateTime);
 let query = `SELECT * FROM revisions WHERE dateTime  BETWEEN date('2019-03-04')AND date('2019-03-10')`;
 var projects = await appDb.all(countQuery);
 console.log(projects)
+
+
 
 }
 
