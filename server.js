@@ -8,11 +8,34 @@ const port = 3000
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-app.get('/api/revisions', async (req, res) => res.send(await getData()))
+app.get('/api/revisionsChart', async (req, res) => res.send(await getChartData()))
+app.get('/api/revisionsActivity', async (req, res) => res.send(await getActivity(100)))
+app.get('/api/users', async (req, res) => res.send(await getUsers()))
+app.get('/api/projects', async (req, res) => res.send(await getProjects()))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-const getData = async () => {
+const getProjects = async () => {
+    const appDb = await sqlite.open('./app.db')
+    let projectQuery= `SELECT * FROM projects ;`;
+    
+    let projects = await appDb.all(projectQuery)
+    return projects
+}
+const getUsers = async () => {
+    const appDb = await sqlite.open('./app.db')
+    let projectQuery= `SELECT * FROM users ;`;
+    
+    let projects = await appDb.all(projectQuery)
+    return projects
+}
+const getActivity = async (lim) => {
+    const appDb = await sqlite.open('./app.db')
+    let projectQuery= `SELECT * FROM revisions ORDER BY dateTime DESC LIMIT ${lim};`;
+    
+    let projects = await appDb.all(projectQuery)
+    return projects
+}
+const getChartData = async () => {
     const appDb = await sqlite.open('./app.db')
     let projectQuery= `SELECT * FROM projects`
     let projects = await appDb.all(projectQuery)
@@ -48,6 +71,6 @@ var projectResult = await appDb.all(countQuery);
     }
     
 }
-console.log(dateObjArray)
+
 return dateObjArray
 }

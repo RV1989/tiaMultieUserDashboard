@@ -12,25 +12,23 @@ const MomentRange = require("moment-range");
 const moment = MomentRange.extendMoment(Moment);
 export default {
   data: () => ({
-    size: 10,
-    charData: []
+    size: 10,   
   }),
+  props: ['charData'],
+  watch: { 
+      	charData: function(newVal, oldVal) { // watch it
+          this.render()
+        }
+  },
 
   mounted() {
-    this.getChatData()
+    //this.render()
   },
   methods: {
-    getChatData(){
-      axios
-      .get('/api/revisions')
-      .then(response => {
-        this.charData = response.data
-        this.render()
-        })
-    },
+  
 
     render() {
-     console.log(this.charData)
+     
       var canvas = this.$refs["my-canvas"];
       var point = new obelisk.Point(70, 70);
       var pixelView = new obelisk.PixelView(canvas, point);

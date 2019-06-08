@@ -147,8 +147,9 @@ WHERE projectId == 2
 GROUP BY strftime('%Y-%m-%d', dateTime);
 
 `
-let query = `SELECT * FROM revisions WHERE dateTime  BETWEEN date('2019-03-04')AND date('2019-03-10')`;
-var projects = await appDb.all(countQuery);
+//let query = `SELECT * FROM revisions WHERE dateTime < date('NOW','-1 YEARS');`;
+let query = `SELECT * FROM revisions ORDER BY dateTime DESC LIMIT 50;`;
+var projects = await appDb.all(query);
 console.log(projects)
 
 

@@ -11,18 +11,18 @@
     </v-toolbar>
 
     <v-content>
-      <revisionChart/>
+      <generalServerView/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import revisionChart from './components/revisionChart'
+import generalServerView from './components/generalServerView'
 
 export default {
   name: 'App',
   components: {
-    revisionChart
+    generalServerView
   },
   data () {
     return {
