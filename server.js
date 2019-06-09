@@ -2,14 +2,23 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Moment = require("moment");
 const MomentRange = require("moment-range");
+const updateData = require('./collectData')
 const moment = MomentRange.extendMoment(Moment);
+var config = require('./config');
 const sqlite = require('sqlite')
 const app = express()
 const port = 3000
 const dbPromise = sqlite.open('./app.db')
+updateData.upDate(config.tiaMultieUserPath )
+
+setInterval(function() {
+    updateData.upDate(config.tiaMultieUserPath )
+}, config.dataUpdateInterval *1000);
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('body-parser').json());
-app.get('/', (req, res) => res.send('Hello World!'))
+app.use(express.static('./frontEnd/dist'))
 app.get('/api/revisions/chart', async (req, res) => res.send(await getRevisionsChart()))
 app.get('/api/revisions/chart/user/:id', async (req, res) => {
     res.send(await getUserRevisionsChart(req.params.id))

@@ -2,7 +2,7 @@
 
     <v-card >
        <v-card-title>
-      <span class="title font-weight-light">User: {{computedUser.computerName}} </span>
+      <span class="title font-weight-light">{{computedUser.computerName}} </span>
     </v-card-title>
     <v-divider v-bind:class="'projectDivider'" :key="index" :inset="false" v-bind:style="{ borderColor: computedUser.color}"></v-divider>
     <v-layout row wrap style="max-height:500px">
