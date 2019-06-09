@@ -1,7 +1,15 @@
 <template>
 <div>
+    <v-card style="max-height:500px">
+    <v-layout row wrap>
+         <v-flex xs7>
   <revisionChart :charData = "generalCharData"/>
+   </v-flex>
+    <v-flex xs5>
   <revisionActivity :activity = "generalActivity" :users = "users" :projects = "projects"/>
+   </v-flex>
+  </v-layout>
+   </v-card>
   </div>
 </template>
 

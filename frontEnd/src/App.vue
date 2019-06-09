@@ -9,9 +9,11 @@
         <span class="font-weight-light px-2">Dashboard</span>
       </v-toolbar-title>
     </v-toolbar>
-
+  
     <v-content>
+      <v-container fluid>
       <generalServerView/>
+      </v-container>
     </v-content>
   </v-app>
 </template>
