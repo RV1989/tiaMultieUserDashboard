@@ -1,9 +1,10 @@
 <template>
 
     <v-card >
-          <v-card-title>
-      <span class="title font-weight-light">Server</span>
+       <v-card-title>
+      <span class="title font-weight-light">User: {{computedUser.computerName}} </span>
     </v-card-title>
+    <v-divider v-bind:class="'projectDivider'" :key="index" :inset="false" v-bind:style="{ borderColor: computedUser.color}"></v-divider>
     <v-layout row wrap style="max-height:500px">
          <v-flex xs7>
   <revisionChart :charData = "generalCharData"/>
@@ -25,50 +26,40 @@ const axios = require ('axios')
       revisionChart,
       revisionActivity
     },
-    props: [ "users", "projects"],
+    props : ['userId', 'users' , 'projects'],
     data: () => ({
     generalCharData: [],
     generalActivity:[],
 
-
   }),
+  computed: {
+    computedUser() {
+      return this.users.find(x => x.id == this.userId)? this.users.find(x => x.id == this.userId) : {color: '#000000' , computerName : 'unknown user'}
+    }
+    },
   methods: {
     getGeneralChatData(){
       axios
-      .get('/api/revisions/chart')
+      .get(`/api/revisions/chart/user/${this.userId}`)
       .then(response => {
         this.generalCharData = response.data
                })
     },
     getGeneralActivity(){
       axios
-      .get('/api/revisions/activity?limit=50')
+      .get(`/api/revisions/activity/user/${this.userId}?limit=50`)
       .then(response => {
           
         this.generalActivity = response.data
                })
     },
-     getUsers(){
-      axios
-      .get('/api/users')
-      .then(response => {
-          
-        this.users = response.data
-               })
-    },
-      getProjects(){
-      axios
-      .get('/api/projects')
-      .then(response => {
-          
-        this.projects = response.data
-               })
-    },
+
   }
     ,
     mounted() {
     this.getGeneralChatData()
     this.getGeneralActivity()
+
   },
 
   }

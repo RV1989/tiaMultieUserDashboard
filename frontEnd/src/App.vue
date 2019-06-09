@@ -2,7 +2,7 @@
   <v-app>
     <v-toolbar
     color="cyan"
-      dark app>
+      dark >
       <v-toolbar-title class="headline text-uppercase">
         <span>Tia Multie User Server</span>
         
@@ -12,7 +12,10 @@
   
     <v-content>
       <v-container fluid>
-      <generalServerView/>
+      <generalServerView :users = "users" :projects = "projects"/>
+      <allProjectsView  :users = "users" :projects = "projects"/>
+      <allUsersView  :users = "users" :projects = "projects"/>
+       
       </v-container>
     </v-content>
   </v-app>
@@ -20,16 +23,47 @@
 
 <script>
 import generalServerView from './components/generalServerView'
-
+import allUsersView from './components/allUsersView'
+import allProjectsView from './components/allProjectsView'
+const axios = require ('axios')
 export default {
   name: 'App',
   components: {
-    generalServerView
+    generalServerView,
+    allUsersView,
+    allProjectsView
+
+
   },
   data () {
     return {
-      //
+      users : [],
+      projects : []
     }
-  }
+  },
+  methods : {
+
+         getUsers(){
+      axios
+      .get('/api/users')
+      .then(response => {
+          
+        this.users = response.data
+               })
+    },
+      getProjects(){
+      axios
+      .get('/api/projects')
+      .then(response => {
+          
+        this.projects = response.data
+               })
+    },
+  },
+    mounted() {
+    this.getUsers()
+    this.getProjects()
+  },
+
 }
 </script>

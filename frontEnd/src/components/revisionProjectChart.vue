@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 const obelisk = require("obelisk.js");
 const Moment = require("moment");
 const MomentRange = require("moment-range");
@@ -41,17 +40,17 @@ export default {
 
         let x = Math.floor((i + firstDay) / 7);
         let y = (i + firstDay) % 7;
-        if (data.projects.length>0 ) {
+        if (data.users.length>0 ) {
           let dayZ = 0
-          for (let project of data.projects){
-           let colorString = project.color.replace('#','')
+          for (let user of data.users ){
+           let colorString = user.color.replace('#','')
            colorString = "0x" + colorString;
            colorString =parseInt(colorString , 16)
 
           dimension = new obelisk.CubeDimension(
             this.size,
             this.size,
-            project.count * 5
+            user.count * 5
           );
           color = new obelisk.CubeColor().getByHorizontalColor(
             colorString
@@ -59,7 +58,7 @@ export default {
           let cube = new obelisk.Cube(dimension, color, false);
           let p3d = new obelisk.Point3D(this.size * x, this.size * y, dayZ);
           pixelView.renderObject(cube, p3d);
-          dayZ += project.count * 5
+          dayZ += user.count * 5
           }
         } else {
           let cube = new obelisk.Cube(dimension, color, false);

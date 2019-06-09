@@ -101,16 +101,13 @@ const projectRevisions = async function (multieUserPath,project, lastRevision , 
         let revisionDateTime = revisionCustomData.dateTime
         let insertQuery = `INSERT INTO revisions (revision ,revisionComment , dateTime, userId , projectId) 
         VALUES (${revision} , "${revisionComment}" , '${revisionDateTime}' , ${userId.id} , ${project.id} )`
-        // {"userName":"Ceratec","dateTime":"2019-02-07T09:32:44.4254918Z","text":"Initial upload","projectVersion":"15.1.0.0","enableCommissionining":null,"enableDivergentData":null}
         await appDb.run(insertQuery)
         let updateQuery = `        
         UPDATE projects
         SET lastKnownRev = ${revision}
         WHERE
          id = ${project.id};`
-         await appDb.run(updateQuery)
-
-        
+         await appDb.run(updateQuery)   
     }
 
     return Promise.resolve()
