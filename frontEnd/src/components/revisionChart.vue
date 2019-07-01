@@ -51,7 +51,7 @@ export default {
           dimension = new obelisk.CubeDimension(
             this.size,
             this.size,
-            project.count * 5
+            project.count * 3
           );
           color = new obelisk.CubeColor().getByHorizontalColor(
             colorString
@@ -59,7 +59,7 @@ export default {
           let cube = new obelisk.Cube(dimension, color, false);
           let p3d = new obelisk.Point3D(this.size * x, this.size * y, dayZ);
           pixelView.renderObject(cube, p3d);
-          dayZ += project.count * 5
+          dayZ += project.count * 3
           }
         } else {
           let cube = new obelisk.Cube(dimension, color, false);
