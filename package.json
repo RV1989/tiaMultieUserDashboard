@@ -23,7 +23,7 @@
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "randomcolor": "^0.5.4",
-    "sequelize": "^5.8.7",
+    "sequelize": "^5.15.1",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.3",
     "sqlite3": "^4.0.8"
